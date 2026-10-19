@@ -1,0 +1,51 @@
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+sns.set_theme(style="whitegrid")
+df = sns.load_dataset("planets").dropna().reset_index(drop=True)
+
+print("Overview:\n", df.head(5), "\n")
+df.info()
+print("\nStats:\n", df.describe().round(2))
+print("\nMethods:", list(df["method"].unique()))
+
+plt.figure(figsize=(7, 4))
+sns.histplot(data=df, x="orbital_period", bins=25, color="teal")
+plt.title("Orbital Period Distribution")
+plt.xlabel("Orbital Period (Days)")
+plt.ylabel("Count")
+plt.tight_layout()
+plt.show()
+
+plt.figure(figsize=(7, 4))
+sns.kdeplot(data=df, x="distance", fill=True, color="purple")
+plt.title("Planet Distance Density (KDE)")
+plt.xlabel("Distance (Parsecs)")
+plt.tight_layout()
+plt.show()
+
+plt.figure(figsize=(7, 4))
+sns.histplot(data=df, x="distance", kde=True, color="salmon", bins=20)
+plt.title("Distance Histogram with KDE Fit")
+plt.xlabel("Distance (Parsecs)")
+plt.ylabel("Count")
+plt.tight_layout()
+plt.show()
+
+plt.figure(figsize=(8, 5))
+sns.scatterplot(data=df, x="distance", y="orbital_period", hue="method", s=60)
+plt.yscale("log")
+plt.title("Distance vs Orbital Period by Method")
+plt.xlabel("Distance (Parsecs)")
+plt.ylabel("Orbital Period (Days - Log)")
+plt.legend(bbox_to_anchor=(1.02, 1), loc="upper left")
+plt.tight_layout()
+plt.show()
+
+plt.figure(figsize=(6, 4))
+corr = df.corr(numeric_only=True)
+print("\nCorrelation:\n", corr.round(2))
+sns.heatmap(corr, annot=True, cmap="mako", fmt=".2f")
+plt.title("Feature Correlation Matrix")
+plt.tight_layout()
+plt.show()
